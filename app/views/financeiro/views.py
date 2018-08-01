@@ -119,8 +119,8 @@ def email_cobranca_automatica():
                     )
                     log_envio.update()
         
-        success('O envio das cobranças foi finalizado')
-        redirect(url_for('financeiro.email_cobranca_automatica'))
+            success('O envio das cobranças foi finalizado')
+            redirect(url_for('financeiro.email_cobranca_automatica'))
     
     content = {
         'title': 'Financeiro',
