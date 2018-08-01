@@ -25,30 +25,39 @@
         
         <!-- Conteudo-->
         <div class="content-wrapper">
+                        
             <div class="content-panel">
-                {# include 'messages.html' #}                
-                
-                {% block content %}
-                {% endblock %}
-                
-                <!--
-                <footer class="col-xs-12 footer" style="margin-bottom: 10px">
-                    <div class="ultra-feature-container">
-                        <p>Stoky distribuidora</p>
+
+                <!-- loading -->
+                <div id="loading">
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <p class="title">Carregando...</p>
                     </div>
-                </footer>
-                -->
+                    
+                </div>
+
+                <div id="content">
+                    {# include 'messages.html' #}                
+            
+                    {% block content %}
+                    {% endblock %}
+                </div>
+
             </div>
         </div>
-
-        <!-- Scripts JS minificados -->
-        {% assets "js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
-
-        {% include 'notify.html' %} 
-        {% block scripts %}
-        {% endblock %}
     </div>
+
+    <!-- Scripts JS minificados -->
+    {% assets "js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% include 'notify.html' %} 
+    {% block scripts %}
+    {% endblock %}
 </body>
 </html>

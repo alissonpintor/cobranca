@@ -8,11 +8,19 @@ $(function () {
     // Inicializa o inputs de acordo com o tipo
     inicializa_inputs();
 
-    // cobrancaControl.init();
-    var location = window.location.pathname;
-    // LOCATIONS[location]();
+    // makes sure the whole site is loaded
+    $(window).on('load', function() {
+        $("#content").show();
+        $("#loading").delay(1000).fadeOut("slow");
+    })
+
+    // makes sure the whole site is unloaded
+    $(window).on('beforeunload', function(event) {
+        $("#loading").fadeIn("slow");
+    })
 
 });
+
 
 function inicializa_inputs(){
     /* 
