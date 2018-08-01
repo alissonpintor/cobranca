@@ -1,0 +1,39 @@
+{% if emails %}
+<table
+    id="mytable"
+    class="display" 
+    data-toggle="table"
+    data-search="true"
+    data-pagination="true"
+    data-show-pagination-switch="true"
+    data-show-columns="true"
+    data-click-to-select="true"
+    data-toolbar="#toolbar"
+    data-show-export="true"
+>
+    <thead>
+        <tr>
+            <th data-sortable="true">Data Envio</th>
+            <th data-sortable="true">Cod.</th>
+            <th data-sortable="true">Cliente</th>
+            <th data-sortable="true">Título</th>
+            <th>Parc.</th>
+            <th data-sortable="true">Vencimento</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in emails %}
+        <tr {{ 'class=danger' if not e.flagenviado }}>
+            <td>{{ e.dtenvio|date_format }}</td>
+            <td>{{ e.idcliente }}</td>
+            <td>{{ e.nomecliente }}</td>
+            <td>{{ e.titulo }}</td>
+            <td>{{ e.parcela }}</td>
+            <td>{{ e.dtvencimento|date_format }}</td>
+            <td>{{ e.valor }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}

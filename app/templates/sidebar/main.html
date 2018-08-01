@@ -1,0 +1,76 @@
+<div id="u-left-panel" class="u-left-panel16">
+        <div class="panel-user-wrapper style1">
+            <div class="panel-user">
+                <img src="{{ image }}" alt="user-image" /> 
+            </div>
+            <div class="panel-user-name">
+                {{ current_user.firstName }}
+            </div>
+        </div>
+        <div id="u-left-menu">
+            <ul class="left-menu-wrapper list-unstyled">
+                <!-- CONFIGURAÇÕES -->
+                <li class="left-menu-parent">
+                    <a href="#">
+                        <span class="left-menu-link-icon">
+                            <i class="fa fa-cogs"></i>
+                        </span>
+                        <span class="left-menu-link-info">
+                            <span class="link-name">CONFIGURAÇÕES</span>
+                            <span class="link-state"></span>
+                        </span>
+                    </a>
+                    <ul class="left-menu-sub list-unstyled">
+                        <li>
+                            <a href="{{ url_for('configuracoes.financeiro') }}">
+                                <span class="left-menu-link-info">
+                                    <span class="link-name">Financeiro</span>
+                                    <span class="link-state"></span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- FINANCEIRO -->
+                <li class="left-menu-parent">
+                    <a href="#">
+                        <span class="left-menu-link-icon">
+                            <i class="fa fa-credit-card"></i>
+                        </span>
+                        <span class="left-menu-link-info">
+                            <span class="link-name">FINANCEIRO</span>
+                            <span class="link-state"></span>
+                        </span>
+                    </a>
+                    <ul class="left-menu-sub list-unstyled">
+                        <li>
+                            <a href="#">
+                                <span class="left-menu-link-info">
+                                    <span class="link-name">Cobrança</span>
+                                    <span class="link-state"></span>
+                                </span>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="{{ url_for('financeiro.email_cobranca_automatica') }}">
+                                        <span class="left-menu-link-info">
+                                            <span class="link-name">Enviar Pendências</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('financeiro.email_cobranca_enviados') }}">
+                                        <span class="left-menu-link-info">
+                                            <span class="link-name">Buscar Enviadas</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul><!--Main ul-->
+        </div>
+    </div>

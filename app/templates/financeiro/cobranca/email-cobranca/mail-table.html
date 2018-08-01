@@ -1,0 +1,22 @@
+<div style="width: 600px; padding: 0 50px">
+    <table style="width: 80%; border-collapse: collapse; text-align: center; line-height: 30px;">
+        <thead style="border-bottom: solid 2px #000;">
+            <tr>
+                <th>Título</th>
+                <th>Parc.</th>
+                <th>Vencimento</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pendencias %}
+            <tr style="border-bottom: solid 0.5px #999">
+                <td>{{ p.titulo }}</td>
+                <td>{{ p.parcela }}</td>
+                <td>{{ p.vencimento }}</td>
+                <td>{{ p.valor }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

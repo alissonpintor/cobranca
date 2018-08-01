@@ -1,0 +1,129 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Configurações de Cobrança</h3>
+    </div>
+
+    {% if form.errors %}
+    <br>
+    <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <ul>
+            {% for key in form.errors.keys() %}
+            {% for error in form.errors[key] %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="panel-body">
+        <div class="row">
+
+            <!-- Email de remetente e dias para buscar a cobrança -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"> 
+                        Email do remetente e dias para cobrança
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <p class="help-block">
+                                    Informe o Email que será usado para o envio das Cobranças e 
+                                    os dias para validar a partir de quando será permitido buscar
+                                    as cobranças.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group {{ 'has-error' if  form.email_remetente.errors }}">
+                            {{ form.email_remetente.label }}
+                            {{ form.email_remetente(class='form-control') }}
+                        </div>
+
+                        <div class="form-group {{ 'has-error' if  form.dias_cobranca.errors }}">
+                            {{ form.dias_cobranca.label }}
+                            {{ form.dias_cobranca(class='form-control') }}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formas de Pagamento usadas na Cobrança Automática -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"> 
+                        Formas de Pagamento usadas na Cobrança Automática
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <p class="help-block">
+                                    Selecione as Formas de pagamento que serão utilizadas para filtrar
+                                    as pendencias que serao usadas no envio de email de cobrança.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group {{ 'has-error' if  form.formas_pagamento.errors }}">
+                            {{ form.formas_pagamento.label }}
+                            {{ form.formas_pagamento(class='form-control', data_type='multiselect') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email de copia para enviar as cobranças -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"> 
+                        Ativar Email(s) Cópia(s) e modo teste
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <p class="help-block">
+                                    Informe o Email que será usado para o envio das Cobranças e 
+                                    os dias para validar a partir de quando será permitido buscar
+                                    as cobranças.
+                                </p>
+                            </div>
+                        </div>
+                                                
+                        <div class="checkbox">
+                            <label>
+                                {{ form.envia_copia() }} {{ form.envia_copia.label }}
+                            </label>
+                        </div>
+
+                        <div class="form-group {{ 'has-error' if  form.emails_cc.errors }}">
+                            {{ form.emails_cc.label }}
+                            {% if form.envia_copia.data %}
+                                {{ form.emails_cc(class='form-control') }}
+                            {% else %}
+                                {{ form.emails_cc(class='form-control', disabled=True) }}
+                            {% endif %}
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                {% if form.envia_copia.data %}
+                                    {{ form.flag_teste() }} {{ form.flag_teste.label }}
+                                {% else %}
+                                    {{ form.flag_teste(disabled=True) }} {{ form.flag_teste.label }}
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

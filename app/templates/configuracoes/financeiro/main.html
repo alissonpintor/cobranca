@@ -1,0 +1,52 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<div class="col-xs-12" style="margin-bottom: 15px">
+    <div class="ultra-feature-container">
+        <div class="row">
+            
+            <div class="col-xs-12" style="margin-bottom: 15px">
+                <h3>{{ title }} <span class="label label-default">{{ subtitle }}</span> </h3>
+                <hr>
+            </div>
+            
+            <form action="{{ url_for('configuracoes.financeiro') }}" method="POST">
+                {{ form.csrf_token }}
+
+                <div class="col-md-12" style="margin-bottom: 5px">
+                    {{ form.submit(class="btn btn-primary")}}
+                </div>
+
+                <div class="col-md-12" style="margin-bottom: 5px">
+                    {% include 'configuracoes/financeiro/cobranca/main.html' %}
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $("#{{form.envia_copia.id}}").on('click', (event) => {
+            var checkboxEnviaCopia = event.currentTarget;
+            var inputEmailsCC = $("#{{form.emails_cc.id}}");
+            var checkboxFlagTeste = $("#{{form.flag_teste.id}}");            
+            
+            if (checkboxEnviaCopia.checked) {
+                inputEmailsCC.prop('disabled', false);
+                checkboxFlagTeste.prop('disabled', false);
+            } else {
+                inputEmailsCC.prop('disabled', true);
+                checkboxFlagTeste.prop('disabled', true);
+                
+                if(checkboxFlagTeste.prop('checked')) {
+                    checkboxFlagTeste.prop('checked', false);
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% if pendencias %}
+<table
+    id="mytable"
+    class="display" 
+    data-toggle="table"
+    data-search="true"
+    data-pagination="true"
+    data-show-pagination-switch="true"
+    data-show-columns="true"
+    data-click-to-select="true"
+    data-toolbar="#toolbar"
+    data-show-export="true"
+>
+    <thead>
+        <tr>
+            <th data-sortable="true">Cod.</th>
+            <th data-sortable="true">Cliente</th>
+            <th data-sortable="true">Título</th>
+            <th>Parc.</th>
+            <th data-sortable="true">Vencimento</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in pendencias %}
+        <tr {{ 'class=success' if p.enviado }} {{ 'class=danger' if not p.email|is_email_valid }}>
+            <td>{{ p.idclifor }}</td>
+            <td>{{ p.nome }}</td>
+            <td>{{ p.idtitulo }}</td>
+            <td>{{ p.digitotitulo }}</td>
+            <td>{{ p.dtvencimento|date_format }}</td>
+            <td>{{ p.valtitulo|currency }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}

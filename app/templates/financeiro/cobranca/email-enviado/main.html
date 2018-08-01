@@ -1,0 +1,32 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<div class="col-xs-12" style="margin-bottom: 15px">
+    <div class="ultra-feature-container">
+        <div class="row">
+            
+            <div class="col-xs-12" style="margin-bottom: 15px">
+                <h3>{{ title }} <span class="label label-default">{{ subtitle }}</span> </h3>
+                <hr>
+            </div>
+            
+            <div class="col-xs-12 col-md-12" style="margin-bottom: 15px">
+                {% include 'financeiro/cobranca/email-enviado/form.html' %}
+            </div>
+
+            <div class="col-xs-12 col-md-12" style="margin-bottom: 15px">
+                {% include 'financeiro/cobranca/email-enviado/table.html' %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var $table = $('#mytable').bootstrapTable({
+        exportTypes: ['doc', 'excel', 'pdf', 'png']
+    });
+</script>
+{% endblock %}

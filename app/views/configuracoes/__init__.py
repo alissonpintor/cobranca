@@ -1,0 +1,1 @@
+from app.views.configuracoes.views import configuracoes
