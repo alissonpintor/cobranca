@@ -102,17 +102,22 @@ def verificar_parametros():
         '/logout',
         '/integrador/produtos/imagens/enviar'
     ]
-
-    parametros = Config.by_id(1)
     is_authenticated = current_user.is_active and current_user.is_authenticated
     path = request.path
 
-    if parametros:
-        parametros = True if parametros.baseUrl else False
-    
-    if is_authenticated and not parametros and path not in allowed_paths:
-        warning('A URL base do sistema deve ser configurada.')
-        return make_response(index())
+    if path not in allowed_paths and is_authenticated:
+        parametros = Config.by_id(1)
+        if not parametros or not parametros.baseUrl:
+            warning('A URL base do sistema deve ser configurada.')
+            return make_response(index())
+        
+        base_url = parametros.baseUrl
+        upload_url = app.config['UPLOADS_DEFAULT_URL']
+        upload_url = upload_url.rsplit('/', 1)[0]  # retorna somente a url base sem o /uploads
+        
+        if not base_url or upload_url is not base_url:
+            upload_url = f'{base_url}/uploads'
+            app.config['UPLOADS_DEFAULT_URL'] = upload_url
 
 
 # Configura o Flask-Uploads para upload de arquivos e fotos

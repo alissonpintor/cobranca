@@ -13,7 +13,7 @@ class Config(object):
     WTF_I18n_ENABLED = True
     UPLOAD_FOLDER = os.path.join(projectPath, 'uploads')
     UPLOADS_DEFAULT_DEST = 'uploads'
-    UPLOADS_DEFAULT_URL = 'http://127.0.0.1:5000/uploads'
+    UPLOADS_DEFAULT_URL = None
     # UPLOADS_DEFAULT_URL = "http://192.168.104.37:5000/uploads"
     CELERY_BROKER_URL = 'redis://localhost:6379/0'
     RESULT_BACKEND = 'redis://localhost:6379/0'
