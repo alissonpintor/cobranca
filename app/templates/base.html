@@ -41,7 +41,7 @@
                 </div>
 
                 <div id="content">
-                    {# include 'messages.html' #}                
+                    {% include 'messages.html' %}                
             
                     {% block content %}
                     {% endblock %}
@@ -56,7 +56,7 @@
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
-    {% include 'notify.html' %} 
+    {# include 'notify.html' #} 
     {% block scripts %}
     {% endblock %}
 </body>
