@@ -106,21 +106,24 @@ def email_cobranca_automatica():
                 # posterior
                 id_cliente = dados.get('idclifor')  # id do cliente no Ciss
                 for p in pendencias_cliente:
-                    log_envio = AppEmailEnviadoCobranca(
-                        titulo=p['titulo'],
-                        parcela=p['parcela'],
-                        dtenvio=data_envio,
-                        dtvencimento=p['vencimento'],
-                        valor=p['valor'],
-                        idcliente=id_cliente,
-                        nomecliente=cliente,
-                        email=destinatarios if destinatarios else mensagem,
-                        flagenviado=enviado
-                    )
+                    log_envio = AppEmailEnviadoCobranca.by(titulo=p['titulo'])
+                    if not log_envio:
+                        log_envio = AppEmailEnviadoCobranca()
+                        log_envio.titulo = p['titulo']
+                    
+                    log_envio.parcela = p['parcela']
+                    log_envio.dtenvio = data_envio
+                    log_envio.dtvencimento = p['vencimento']
+                    log_envio.valor = p['valor']
+                    log_envio.idcliente = id_cliente
+                    log_envio.nomecliente = cliente
+                    log_envio.email = destinatarios if destinatarios else mensagem
+                    log_envio.flagenviado = enviado
+                    
                     log_envio.update()
         
             success('O envio das cobranças foi finalizado')
-            redirect(url_for('financeiro.email_cobranca_automatica'))
+            pendencias = validar_pendencias_enviadas(dtinicial, dtfinal)
     
     content = {
         'title': 'Financeiro',

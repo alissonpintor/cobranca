@@ -80,16 +80,20 @@ class BaseModel(Model):
         return data
     
     @classmethod
-    def by(cls, **kwargs):
+    def by(cls, get_first=True, **kwargs):
         from app import db
 
+        columns = cls.__table__.columns
         data = db.session.query(cls)
 
         for k, v in kwargs.items():
-            if k.upper() in cls.__table__.columns.keys():
-                column = cls.__table__.columns[k.upper()]
+            if columns.has_key(k):
+                column = columns[k]
                 data = data.filter(column==v)
-        data = data.first()
+            else:
+                return None
+        
+        data = data.first() if get_first else data.all()
         
         return data
     
