@@ -28,7 +28,7 @@ def warning(message):
 
 def error(message):
     """ Grava uma mensagem de erro para o Usuario usando o flash """
-    content = {'type': 'error', 'content': message}            
+    content = {'type': 'danger', 'content': message}            
     flash(content)
 
 
