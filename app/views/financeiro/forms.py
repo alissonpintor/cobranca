@@ -62,7 +62,7 @@ class FormBuscarPendencias(FlaskForm):
         dtinicial = field.data
         dtfinal = form.dtfinal.data
 
-        if dtinicial > dtfinal:
+        if not dtfinal or dtinicial > dtfinal:
             raise ValidationError('A data Final deve ser maior que a Inicial.')
     
     @classmethod

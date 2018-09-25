@@ -87,15 +87,13 @@ def cortar_image(imagem, size=500, quality=75):
 
     if imagem.mode == 'RGBA':
         imagem = pure_pil_alpha_to_color_v2(imagem)
-    
+
     imagem = imagem.convert('RGB')
 
     Xsize, Ysize = imagem.size
     xCoord = 0 if Xsize <= Ysize else (Xsize - Ysize)/2
     yCoord = 0 if Ysize <= Xsize else (Ysize - Xsize)/2
     cropBox = (xCoord, yCoord, Xsize-xCoord, Ysize-yCoord)
-
-    print(cropBox)
 
     imagem = imagem.crop(cropBox)
     imagem.load()
@@ -104,4 +102,3 @@ def cortar_image(imagem, size=500, quality=75):
     imagem = imagem.resize(resizeBox)
 
     imagem.save(nome, 'JPEG', dpi=(72, 72), quality=quality)
-

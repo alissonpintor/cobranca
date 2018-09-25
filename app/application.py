@@ -5,12 +5,13 @@ from app.config import app_config
 
 from flask import Flask, send_from_directory, request, render_template
 from flask import request_finished, redirect, url_for, make_response
+from flask import current_app
 from flask_login import current_user
 from flask_migrate import Migrate
 from flask_uploads import configure_uploads
 from flask_babel import Babel
 
-from app.core.celery_app import Task
+from app.core.celery_app import make_celery
 
 
 #Configura a Moeda
@@ -20,6 +21,9 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(app_config['dev'])
 app.config.from_pyfile('config.py')
+
+with app.app_context():
+    current_app.task = None
 
 assets.init_app(app)
 db.init_app(app)
@@ -32,9 +36,7 @@ assets.register('css', css)
 assets.register('js', js)
 
 # Incia o Celery
-Task.set_celery(app)
-mycelery = Task.get_celery()
-from app.core import tasks
+mycelery = make_celery(app)
 
 # Inicia o Login Manager
 loginManager.init_app(app)
@@ -138,3 +140,23 @@ def get_locale():
     # Realiza a tradução do Flask-WTF
     code = request.args.get('lang', 'pt')
     return code
+
+
+@app.before_request
+def verificar_tasks():
+    """
+        Verifica se existe alguma task e se ela esta em execução
+    """
+
+    if task_is_failure(current_app.task):
+        current_app.task = None
+
+
+def task_is_failure(task):
+    """
+        Se a Task esta com status FAILURE configura como None
+    """
+
+    if task and task.state == 'FAILURE':
+        return True
+    return False

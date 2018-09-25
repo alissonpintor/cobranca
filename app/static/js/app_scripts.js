@@ -69,123 +69,129 @@ function inicializa_inputs(){
         }
     });
 }
-/*
-const LOCATIONS = {
-    '/configuracoes/financeiro': () => {
-        configCobrancaControl.init();
-    }
-}
 
-var configCobrancaControl = (function(){
+
+/**
+ *  Controle das Tasks em execução
+ */
+
+var taskModel = (function(){
+    /**
+     * Representa a model que vai conter todos os objetos das tarefas
+     * em execução no backend
+     */
     
-    return {
-        init: function() {
-            console.log('deu certo', '/configuracoes/financeiro');
-        }
-    }
-})();
-*/
-
-/*
-var cobrancaControl = (function(){
-    var dataInicial, dataFinal, DOM, errors;
-    errors = []
-
-    DOM = {
-        dtinicial: '#dtinicial',
-        dtfinal: '#dtfinal',
-        buscar: '#buscar',
-        enviar: '#enviar',
-        errors: '#errors'
+    var Task = function (taskId, total, current, status) {
+        this.id = taskId;
+        this.total = total;
+        this.current = current;
+        this.status = status;
     };
 
-    var formatDate = function(data) {
-        var splitDate, year, month, day, formatedDate;
-        if (data) {
-            splitDate = data.split('/');
-
-            year = parseInt(splitDate[2]);
-            month = parseInt(splitDate[1]) - 1;
-            day = parseInt(splitDate[0]);
-            
-            formatedDate = new Date(year, month, day);
-
-            return formatedDate;
-        } else {
-            return undefined;
-        }     
-    };
-
-    var showErrors = function() {
-        var html, htmlErrors;
-        htmlErrors = '';
-        
-        html = '<div class="alert alert-danger" role="alert">' +
-               '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-               '<ul>' +
-               '#errors#' +
-               '</ul>' +
-               '</div>';
-        
-        $(errors).each(function(index, error){
-            htmlErrors += '<li>' + error + '</li>';
-        });
-
-        html = html.replace('#errors#', htmlErrors);
-        errors = [];
-
-        $(DOM.errors).html(html);
-        //$(DOM.errors).toggle('fade');
-    };
-
-    var validate = function() {
-        var today = new Date();
-        today.setHours(0,0,0,0);
-
-        if (dataInicial === undefined) {
-            errors.push('A data inicial é obigatório.');
-        }
-
-        if (dataFinal === undefined) {
-            errors.push('A data final é obigatório.');
-        }
-
-        if (dataInicial > dataFinal) {
-            errors.push('A data inicial deve ser menor que a final.');
-        }
-
-        if (dataFinal >= today) {
-            errors.push('A data final deve ser menor que hoje.');
-        }
-    };
-
-    var setEvents = function() {
-        $(DOM.buscar).on('click', function(event){
-            event.preventDefault();
-
-            dataInicial = formatDate($(DOM.dtinicial).val());
-            dataFinal = formatDate($(DOM.dtfinal).val());
-
-            validate();
-            if (errors) {
-                showErrors();
-            }
-
-            //console.log(dataInicial > dataFinal);
-            //console.log(dataInicial.toLocaleDateString());
-        })
-    };
+    var task;
 
     return {
-        init: function() {
-            setEvents();
+        // 1) criar Task
+        createTask: function (data) {
+            task = new Task(
+                data.id,
+                data.total,
+                data.current,
+                data.status
+            )
         },
 
-        data: function() {
-            return {
-                dtinicial: dataInicial,
-                dtfinal: dataFinal
-            }
+        // 2) update task
+        updateTask: function (current, status) {
+            task.current = current;
+            task.status = status;
+        },
+
+        // 3) get task
+        getTask: function () {
+            return task;
         }
-    };
-})(); */
+    }
+ });
+
+ var taskUI = (function(){
+     var elements = {
+        taskTitle: document.getElementById('task-title'),
+        taskPanel: document.getElementById('task-panel'),
+        taskMessage: document.getElementById('task-message'),
+        progressBar: document.getElementById('task-progress-bar')
+     }
+
+     return {
+         updateTaskHTML: function (task) {
+            var currentPerc = parseInt((parseInt(task.current) * 100) / parseInt(task.total));
+
+            elements.taskMessage.innerHTML = `
+                <strong>Tarefas Executadas: </strong> &#32; ${task.current} &#32; de &#32; ${task.total} &#32;
+                <strong>Status: </strong> &#32; ${task.status} &#32;
+            `;
+            
+            elements.progressBar.style.width = `${currentPerc}%`;
+            elements.progressBar.innerHTML = `${currentPerc}%`;
+         },
+
+         addButton: function () {
+             var button = document.createElement('a');
+             button.href = window.location.pathname + '?clear_task=yes';
+             button.innerHTML = 'Atualizar Pagina';
+             button.classList.add('btn', 'btn-primary');
+
+             elements.taskPanel.insertAdjacentElement('beforeend', button);
+         },
+
+         updateTitleText: function (text) {
+            elements.taskTitle.innerText = text;
+         }
+     }
+ });
+
+ var taskControl = (function(){
+     var model = taskModel();
+     var ui = taskUI();
+    
+     // 1) iniciar a task a partir do id
+     var initTask = function (taskId) {
+        $.ajax({
+            url: `/financeiro/task/${taskId}`,
+            success: (data) => {
+                model.createTask(data);
+                updateTasks();
+            }
+        });
+     };
+
+     // 2) atualizar o status da task
+     var updateTasks = function () {
+         var task = model.getTask();
+         ui.updateTaskHTML(task);
+
+         if (task.current < task.total) {
+             setTimeout( () => {
+                $.ajax({
+                    url: `/financeiro/task/${task.id}`,
+                    success: (data) => {
+                        model.updateTask(data.current, data.status)
+                        updateTasks();
+                    }
+                });
+             }, 1000);
+         } else {
+            ui.addButton();
+            ui.updateTitleText('Tarefa Completada');
+         }
+     };
+
+     // 3) exibir tarefa finalizada quando a task for encerrada
+
+     return {
+         init: function (taskId) {
+            initTask(taskId);
+            // model.createTask(data);
+         }
+     }
+ });

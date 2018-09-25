@@ -16,7 +16,7 @@ class Config(object):
     UPLOADS_DEFAULT_URL = None
     # UPLOADS_DEFAULT_URL = "http://192.168.104.37:5000/uploads"
     CELERY_BROKER_URL = 'redis://localhost:6379/0'
-    RESULT_BACKEND = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 
 class DevelopmentConfig(Config):
